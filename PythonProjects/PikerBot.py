@@ -52,13 +52,12 @@ async def greet(ctx):
 async def pikesup(ctx):
     guild = ctx.guild
     role = discord.utils.get(guild.roles, name='@everyone')
-    await ctx.send(f":raised_back_of_hand: {role}")
+    await ctx.send(f"PIKES UP! :raised_back_of_hand: {role}")
 
 
 
 @bot.command()
 async def poll(ctx, question: str, *options: str):
-    print('working')
     if len(options) <= 1:
         await ctx.send("You need more than one option to make a poll!")
         return
@@ -78,7 +77,7 @@ async def poll(ctx, question: str, *options: str):
     for reaction in reactions[:len(options)]:
         await react_message.add_reaction(reaction)
     embed.set_footer(text='Poll ID: {}'.format(react_message.id))
-    await ctx.edit_message(react_message, embed=embed)
+    await react_message.edit(embed=embed)
 
 
 
