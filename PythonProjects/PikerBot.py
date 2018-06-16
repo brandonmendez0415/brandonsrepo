@@ -80,7 +80,6 @@ async def poll(ctx, question: str, *options: str):
     await react_message.edit(embed=embed)
 
 
-
 #@bot.command()
 #async def cat(ctx):
 #    await ctx.send("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif")
@@ -88,7 +87,7 @@ async def poll(ctx, question: str, *options: str):
 
 @bot.command()
 async def info(ctx):
-    embed = discord.Embed(title="nice bot", description="Nicest bot there is ever.", color=0xeee657)
+    embed = discord.Embed(title="PikerBot", description="A bot for the Pikers.", color=0xeee657)
 
     # give info about you here
     embed.add_field(name="Author", value="BMendez0415")
@@ -107,7 +106,7 @@ bot.remove_command('help')
 
 @bot.command()
 async def help(ctx):
-    embed = discord.Embed(title="nice bot", description="A Very Nice bot. List of commands are:", color=0xeee657)
+    embed = discord.Embed(title="PikerBot", description="A bot made for the Pikers. List of commands are:", color=0xeee657)
 
     #embed.add_field(name="!add X Y", value="Gives the addition of **X** and **Y**", inline=False)
     #embed.add_field(name="!multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
@@ -117,5 +116,5 @@ async def help(ctx):
     embed.add_field(name="!info", value="Gives a little info about the bot", inline=False)
     embed.add_field(name="!help", value="Gives this message", inline=False)
 
-    await ctx.send(embed=embed)
+    await ctx.author.send(embed=embed)
 bot.run(TOKEN)
