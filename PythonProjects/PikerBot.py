@@ -83,6 +83,34 @@ async def poll(ctx, question: str, *options: str):
     await react_message.edit(embed=embed)
 
 
+@bot.command()
+async def tally(ctx, id):
+    poll_message = await ctx.channel.get_message(id)
+    if not poll_message.embeds:
+        return
+    embed = poll_message.embeds[0]
+    if poll_message.author != ctx.message.guild.me:
+        return
+    if not embed.footer.text.startswith('Poll ID:'):
+        return
+    unformatted_options = [x.strip() for x in embed.description.split('\n')]
+    opt_dict = {x[:2]: x[3:] for x in unformatted_options} if unformatted_options[0][0] == '1' \
+        else {x[:1]: x[2:] for x in unformatted_options}
+    # check if we're using numbers for the poll, or x/checkmark, parse accordingly
+    voters = [ctx.message.guild.me.id]  # add the bot's ID to the list of voters to exclude it's votes
+
+    tally = {x: 0 for x in opt_dict.keys()}
+    for reaction in poll_message.reactions:
+        if reaction.emoji in opt_dict.keys():
+            reactors = reaction.users()
+            async for reactor in reactors:
+                if reactor.id not in voters:
+                    tally[reaction.emoji] += 1
+                    voters.append(reactor.id)
+
+    output = 'Results of the poll for "{}":\n'.format(embed.title) + \
+             '\n'.join(['{}: {}'.format(opt_dict[key], tally[key]) for key in tally.keys()])
+    await ctx.send(output)
 #@bot.command()
 #async def cat(ctx):
 #    await ctx.send("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif")
