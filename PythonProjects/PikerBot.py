@@ -55,7 +55,7 @@ async def pikesup(ctx):
         role = discord.utils.get(guild.roles, name='@everyone')
         await ctx.send(f"PIKES UP! :raised_back_of_hand: {role}")
     else:
-        await ctx.send("You do not have permission to use this command.")
+        await ctx.send("PIKES UP! :raised_back_of_hand:")
 
 
 
