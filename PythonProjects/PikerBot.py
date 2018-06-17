@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-TOKEN = 'NDU2OTQ0MDI0MzEwMzgyNTky.DgSGqg.JaYrwxRSuVRbD_4_DZr4v_Ec5rk'
+TOKEN = 'NDU3NzI2OTAyNjQwMDUwMTk2.Dgdf9A.575z5UJkZ5C_QZyYzfODPEVTxQY'
 
 bot = commands.Bot(command_prefix='!')
 
@@ -50,9 +50,12 @@ async def greet(ctx):
 
 @bot.command()
 async def pikesup(ctx):
-    guild = ctx.guild
-    role = discord.utils.get(guild.roles, name='@everyone')
-    await ctx.send(f"PIKES UP! :raised_back_of_hand: {role}")
+    if ctx.author.top_role.name == 'Executive':
+        guild = ctx.guild
+        role = discord.utils.get(guild.roles, name='@everyone')
+        await ctx.send(f"PIKES UP! :raised_back_of_hand: {role}")
+    else:
+        await ctx.send("You do not have permission to use this command.")
 
 
 
