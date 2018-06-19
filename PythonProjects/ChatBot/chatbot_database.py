@@ -1,8 +1,8 @@
 import sqlite3
 import json
 from datetime import datetime
-
-timeframe = '2018-05'
+timeframe = '2018-03'
+cleanup = 1000000
 sql_transaction = []
 
 connection = sqlite3.connect('{}.db'.format(timeframe))
@@ -60,7 +60,7 @@ def acceptable(data):
 
 def sql_insert_replace_comment(commentid,parentid,parent,comment,subreddit,time,score):
     try:
-        sql = """UPDATE parent_reply SET parent_id = ?, comment_id = ?, parent = ?, comment = ?, subreddit = ?, unix = ?, score = ? WHERE parent_id =?;""".format(parentid, commentid, parent, comment, subreddit, int(time), score, parentid)
+        sql = """UPDATE parent_reply SET parent_id = {}, comment_id = {}, parent = {}, comment = {}, subreddit = {}, unix = {}, score = {} WHERE parent_id = {};""".format(parentid, commentid, parent, comment, subreddit, int(time), score, parentid)
         transaction_bldr(sql)
     except Exception as e:
         print('s-UPDATE insertion',str(e))
@@ -93,21 +93,24 @@ def transaction_bldr(sql):
                 pass
         connection.commit()
         sql_transaction = []
+
+
 if __name__ == "__main__":
     create_table()
     row_counter = 0
     paired_rows = 0
 
+
     with open("D:/chatdata/{}/RC_{}".format(timeframe.split('-')[0], timeframe), buffering=1000) as f:
         for row in f:
             row_counter += 1
             row = json.loads(row)
-            parent_id = row['parent_id']
+            parent_id = 't3_' + row['parent_id'].split('_')[1]
             body = format_data(row['body'])
             created_utc = row['created_utc']
             score = row['score']
             subreddit = row['subreddit']
-            comment_id = row['link_id']
+            comment_id = 't3_' + row['id']
             parent_data = find_parent(parent_id)
 
             if score >= 5:
@@ -128,3 +131,10 @@ if __name__ == "__main__":
                                                  subreddit, created_utc, score)
             if row_counter % 100000 == 0:
                 print("Total rows read: {}, Paired rows: {}, Time: {}".format(row_counter, paired_rows, str(datetime.now())))
+            if row_counter % cleanup == 0:
+                print("Cleanin up!")
+                sql = "DELETE FROM parent_reply WHERE parent IS NULL"
+                c.execute(sql)
+                connection.commit()
+                c.execute("VACUUM")
+                connection.commit()
