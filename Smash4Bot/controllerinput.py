@@ -2,7 +2,7 @@ import pyvjoy
 
 class ControllerInputs(object):
     MAX_VJOY = 32767
-    THRESHOLD = 0.75
+    THRESHOLD = 0.9
 
     def __init__(self, VJoyDeviceNumber):
         self.device = pyvjoy.VJoyDevice(VJoyDeviceNumber)
