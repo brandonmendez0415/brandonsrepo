@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-TOKEN = 'NDU3NzI2OTAyNjQwMDUwMTk2.Dgdf9A.575z5UJkZ5C_QZyYzfODPEVTxQY'
+TOKEN = 'fixThis' // TODO: get this from a local file so it is not on github
 
 bot = commands.Bot(command_prefix='!')
 
@@ -28,8 +28,8 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if 'fuck' in message.content:
-        msg = 'hey this is a christian server'
+    if 'restricted_word' in message.content: // TODO: make a Set of restricted words to check against the contents of the message.
+        msg = 'let\'s keep it PG'
         await message.channel.send(msg)
     await bot.process_commands(message)
 
